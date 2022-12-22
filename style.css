@@ -1,0 +1,78 @@
+body{
+    font-size:20px;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: gold;
+    color: black;
+    text-align: center;
+}
+    
+.collapsed{
+    display: none;
+}
+.expanded{
+    display: inline-block;
+}
+        .countdown-graphic{
+            width: 20%;
+        }
+        .scaffold{
+            fill: none;
+            stroke: brown;
+            stroke-width: 5;
+        }
+        .rope{
+            stroke: goldenrod;
+            stroke-linecap: round;
+        }
+        .hanged-man{
+            fill: lightgray;
+            stroke: black;
+            stroke-width: 5;
+        }
+        .hand{
+            fill: black;
+        }
+        .hidden{
+            visibility: hidden;
+        }
+
+        .visible{
+            visibility: visible;
+        }
+
+        .advent-button{
+            font-size: 50px;
+            background-color: lightyellow;
+            width: 3em;
+            border-radius: 20px;
+            border-color: red green;
+            border-width: 10px;
+            /*border-style: solid;*/
+            cursor: pointer;
+            text-align: left;
+        }
+        .advent-button:disabled{
+            cursor: not-allowed;
+        }
+        .advent-table {
+            width: 100%;
+            height: 70%;
+            text-align: center;
+            background-image: url("images/christmas-tree.svg");
+        }
+        .advent-cell {
+            text-align: centre;
+        }
+        .advent-footer {
+            position: static;
+        }
+        .advent-opendoor {
+            background-color: black;
+            color: white;
+        }
