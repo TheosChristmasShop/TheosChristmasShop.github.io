@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TCS Christmas Hangman 2021</title>
+<meta charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+
+<script lang="javascript">
+    var wrongGuesses = []
+var words = ['computer','jingle','bells','rudolph','sparkling','shop','merry','tree','santa','father','north','pole','snow','red','white','December','advent','calendar','manger','carolling','christmas tree','christmas decoration','sweet table','christmas shop','Christmas Day 2021','Christmas presents from father christmas','ice','Christmas stockings','Jingle bells','Christmas hangman','Boxing day','New Years Eve','New Years Day','Christmas eve','presents','present','gold','wrapping paper','wrapping','selotape','bauble','The first Sunday of advent','Christmas pudding','Christmas cracker','cracker','joke','George is not a legend','Christmas stamps','church','carol','carols','dancing','Christmas dancing','Merry christmas and a happy new year','Christmas music','gold coins','silver coins','star','sleigh','jul','phone','jingle all the way','Once in royal david city','Away in a manger','Bethlehem','Christmas lights','jingle bells jingle bells jingle all the way','Hall Farm','mince pies','mince pie'];
+var guesses = []
+var word = ""
+var name = "";
+var otherWebsites = '';
+var image = "";
+
+
+function revealHangman(){
+    if (wrongGuesses.length == 1){
+document.getElementById("right-foot").setAttribute("class", "visible hanged-man");
+    }
+else if (wrongGuesses.length == 2){
+    document.getElementById("left-foot").setAttribute("class", "visible hanged-man");
+}
+else if (wrongGuesses.length == 3){
+    document.getElementById("right-leg").setAttribute("class", "visible hanged-man");
+}
+else if (wrongGuesses.length == 4){
+    document.getElementById("left-leg").setAttribute("class", "visible hanged-man");
+}
+else if (wrongGuesses.length == 5){
+    document.getElementById("left-hand").setAttribute("class", "visible hanged-man");
+    document.getElementById("left-arm").setAttribute("class", "visible hanged-man");
+}
+else if (wrongGuesses.length == 6){
+    document.getElementById("right-hand").setAttribute("class", "visible hanged-man");
+    document.getElementById("right-arm").setAttribute("class", "visible hanged-man");
+}
+else if (wrongGuesses.length == 7){
+    document.getElementById("body").setAttribute("class", "visible hanged-man");
+    document.getElementById("mouth").setAttribute("class", "visible hanged-man");
+}
+else if (wrongGuesses.length == 8){
+    document.getElementById("left-eye").setAttribute("class", "visible hanged-man");
+}
+else if (wrongGuesses.length == 9){
+    document.getElementById("right-eye").setAttribute("class", "visible hanged-man");
+}
+else if (wrongGuesses.length == 10){
+    document.getElementById("head").setAttribute("class", "visible hanged-man");
+}else {
+    document.getElementById("status").innerHTML = "There has been an error with the hangman graphic.";
+}
+}
+
+
+function pickWord(){
+    index = Math.floor(Math.random()*words.length);
+    return words[index].toUpperCase().trim();
+}
+
+function loadWord(){
+    word = pickWord();
+    document.getElementById("word").innerHTML = word;
+    document.getElementById("len").innerHTML = "The word (or phrase) is "+word.length+" letters long.";
+    return word;
+}
+
+function loadAssignedWord(){
+    word = document.getElementById("inputWord").value.toUpperCase();
+    confirmWord = document.getElementById("confirmWord").value.toUpperCase();
+    if (word == confirmWord){
+    console.log(word);
+    console.log(replace());
+    result = replace();
+    console.log(result);
+    document.getElementById("word").innerHTML = result;
+    document.getElementById("len").innerHTML = "The word (or phrase) is "+word.length+" letters long.";
+    document.getElementById("inputWord").value = "";
+    document.getElementById("inputWord").disabled = true;
+    document.getElementById("submitWord").disabled = true;
+    document.getElementById("chooseWord").innerHTML = "You have been challenged to guess a word chosen by someone. This game will not count towards your leaderboard score."
+    }
+    else {
+        document.getElementById("chooseWord").innerHTML = document.getElementById("chooseWord").innerHTML+"<br/>Error: Your word does not match what you typed in the confirm box. Please try again."
+    }
+}
+   
+function replace(){
+    var result = "";
+    console.log("Replace is receiving "+word);
+    word.split("").forEach(item =>{        
+        if (guesses.includes(item)){
+            result = result+item+" ";
+        }
+        else{
+            result = result+"_"+" ";
+        }
+    })
+    return result;
+}
+
+function resetName(){
+    localStorage.clear();
+window.location.reload();
+document.getElementById("guessForm").setAttribute("class", "hidden");
+    
+}
+
+function start(){
+    const guessInput = document.getElementById("guess")
+    guessInput.addEventListener("keyup", function(event){
+        if (event.keycode == 13){
+            event.preventDefault();
+            document.getElementById("submit").click();
+        }
+    })
+    word = loadWord();
+    result = replace();
+    document.getElementById("word").innerHTML = result;
+        if (localStorage.lockin == "t" && !localStorage.escapeRoomPlay == "T"){
+            document.body.innerHTML = "<h2>Locked out</h2>Sorry, you are locked out of our games website until you break free from our <a href='/escape-room'>escape room</a>. If you are seeing this page even after escaping, please <a href='https://tactiletimes.org/contact'>contact us</a>"
+        }
+    
+}
+function processGuess(){
+    console.log("Process guess is receiving "+word);
+    console.log("Guessed "+document.getElementById("guess").value)
+    duplicate = 0
+    guess = document.getElementById("guess").value.toUpperCase().charAt(0);
+console.log("Guess variable set to "+guess);
+    if (guess == "" || guess == "!"){
+        document.getElementById("status").innerHTML = "This is not a valid guess.";
+        document.getElementById("guess").value = "";
+        return "INVALID";
+    }
+    
+
+    else if (!guesses.includes(guess)){
+        guesses.push(guess);
+    }
+    else{
+        duplicate = 1
+        document.getElementById("status").innerHTML = "You have already guessed this, "+name+". Have another go.";
+    }
+
+    if (!replace(word).includes("_") && guesses.includes(guess)){
+        if (localStorage.escapeRoomPlay == "T"){
+            localStorage.hangSuccess = "T";
+            window.location.href = "https://games.tactiletimes.org/escape-room/";
+        }
+            document.getElementById("game").innerHTML = "<h2>YOU HAVE WON</h2><br/>Well done "+name+"! You guessed the word correctly.<br/>The word was "+word+" and you submitted "+wrongGuesses.length+" wrong guesses.<br/><h2>Your stats</h2><br/>Your name: "+name+"<br/>Word was picked by computer: "+words.includes(word)+"<br/>Wrong guesses: "+wrongGuesses.length+"<br/>Total guesses: "+guesses.length+"";
+            localStorage.lastScore = wrongGuesses.length;
+            return "WINNER";
+    }
+else if (word.includes(guess) && guesses.includes(guess) && duplicate == 0){
+document.getElementById("status").innerHTML = "Well done "+name+"! Your guess was in the word.";
+}
+
+else if (!word.includes(guess) && guesses.includes(guess) && duplicate == 0){
+    wrongGuesses.push(guess);
+    document.getElementById("wrong").innerHTML = wrongGuesses.length;
+    document.getElementById("status").innerHTML = "Boo, your guess wasn't in the word. Why not have another go?";
+revealHangman();
+if (wrongGuesses.length >= 10){
+        document.getElementById("game").innerHTML = "<h2>YOU HAVE BEEN HANGED</h2><br/>Sorry "+name+", you submitted too many wrong guesses and you were hanged. The word you were trying to guess was "+word+" <br/>Why not reload this page to try again?<br/><h2>Your stats</h2><br/>Your name: "+name+"<br/>Total guesses: "+guesses.length+"<br/>Wrong guesses: "+wrongGuesses.length+"<br/>We hope you enjoyed playing our Hangman game!";
+        localStorage.lastScore = wrongGuesses.length;
+return "HANGED";
+}
+}    
+ 
+
+result = replace();
+    document.getElementById("word").innerHTML = result;
+    document.getElementById("guess").value = "";
+}
+
+function processName(){
+    name = document.getElementById("name").value;
+    console.log("Process name is receiving "+word);
+code = document.getElementById("code").value;
+codes = ["Christmas2o21","TCS2021@","Stampers@TCS!"];
+if (!name == "" && codes.includes(code)){
+
+    document.getElementById("name").value = "";
+    document.getElementById("code").value = "";
+    document.getElementById("nameForm").innerHTML = "";
+    document.getElementById("guessForm").setAttribute("class", "expanded");
+document.getElementById("reload").innerHTML = '<button style="color:red; button-color:yellow; font-size:30px;" onClick="window.location.reload();">Start new game</button>';
+    }
+    else{
+        document.getElementById("nameStatus").innerHTML = "You must enter a name and valid access code. Either the name box is empty, or your access code is invalid.";
+
+    }
+}
+
+window.onload = start;
+
+</script>
+</head>
+<body>
+
+    <h1 style="font-size:50px;">
+            Christmas Hangman 🎄
+        </h1>
+        <div id="game">
+    
+        <div id="instructions">
+        
+        </div>
+            <div id="nameForm">
+                Welcome to Theo's Christmas Shop 2021.
+                <br/>
+                This year we have a christmas-themed hangman game available to our customers and visitors<br/>
+                To play you need to enter your name and an access code you have been given. If you don't have an access code, ask for one at the shop.
+                <br/>
+                <div aria-live="assertive" id="nameStatus"></div>
+                <br/>
+                <input id="name" type="text" title="Enter name..." placeholder="Your name"></input>
+                <br/>
+                <input id="code" type="text" title="Enter access code..." placeholder="Your access code"/>
+                <br/>
+                <br/>
+                <button id="submitName" onClick="processName();" class="buttons">Play now &rarr;</button>
+            <div id="chooseWord">
+                You are playing a game using a word picked randomly by the computer.<br/>
+                If someone wants to choose a word for you to guess, they can do it below.
+                <h2>Choose a word</h2>
+            If you would like to pick a word for someone to guess, enter your word below. Only use this if the person you are choosing a word for has access to this device. If you would like the computer to randomly choose you a christmas word, do not submit a word below.
+            <br/>
+
+            <br/>
+            <input id="inputWord" type="password" title="Enter a word..."/>
+            <br/>
+<input type="password" id="confirmWord" title="Re-type your word to confirm it"/>
+<br/>            
+<button id="submitWord" class="buttons" onClick="loadAssignedWord();">Set word</button>
+</div>
+                            <h2>Leaderboard</h2>
+            <iframe src="https://docs.google.com/document/d/e/2PACX-1vQMGStaPfDYFTFuoEBHKaUMU4zxwXW3NpmB7S8_nlLww_UaPOnAdSx3tPzE2JE3N9N0hMGcte0X86ra/pub?embedded=true"></iframe>
+            <br/>
+            Being put on the leaderboard is <b>not</b> automatic yet, so please ask us to add your score.
+            </div>    
+            
+            <div id="guessForm" class="collapsed">
+            <h2>Submit a guess</h2>
+            <div id="word" style="border: 5px solid">No word at the moment</div>
+<div id="len">The word is 0 letters long.</div>
+            <p>You have submitted <span id="wrong">0</span>/10 wrong guesses.</p>
+<div aria-live="assertive" id="status">No guesses have been submitted yet.</div>
+        <p>Type your guess here:</p>
+        <input id="guess" maxlength="1" type="text" title="Enter guess..."></input>
+    <button id="submit" onClick="processGuess();">Submit</button>
+</div><br/><br/>
+</div>
+<div id="reload"></div>
+
+
+    <figure class="countdown-graphic">
+        <svg id="hanged-man-graphic" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+            <title>Picture of hanged man used as tally for mistakes</title>
+            <g class="scaffold">
+                <line id="base" x1=150 y1=290 x2=260 y2=290 />
+                <line id="pole" x1=225 y1=290 x2=225 y2=10 />
+                <line id="stay-left" x1=200 y1=290 x2=225 y2=265 />
+                <line id="stay-right" x1=250 y1=290 x2=225 y2=265 /> 
+                <line id="beam" x1=225 y1=20 x2=100 y2=20 />
+                <line id="strut" x1=200 y1=20 x2=225 y2=50 />
+                <line id="rope" class="rope" x1=110 y1=20 x2=110 y2=50 />             
+            </g>
+            <g id="hanged-man" class="hanged-man hidden">
+                <circle id="head" cx=110 cy=70 r=20 />
+                <circle id="left-eye" cx=105 cy=65 r=1 />
+                <circle id="right-eye" cx=115 cy=65 r=1 />
+                <line id="mouth" x1=100 y1=77 x2=120 y2=77 />
+                <line id="body" x1=110 y1=90 x2=110 y2=150 />
+                <line id="left-arm" x1=80 y1=140 x2=110 y2=100 />
+                <circle id="left-hand" class="hand" cx=80 cy=140 r=5 />
+                <line id="right-arm" x1=140 y1=140 x2=110 y2=100 />
+                <circle id="right-hand" class="hand" cx=140 cy=140 r=5 />
+                <line id="left-leg" x1=80 y1=190 x2=110 y2=150 />
+                <line id="left-foot" x1=65 y1=190 x2=85 y2=190 />
+                <line id="right-leg" x1=140 y1=190 x2=110 y2=150 />
+                <line id="right-foot" x1=135 y1=190 x2=155 y2=190 />
+            </g>
+        </svg>
+    </figure>
+    <button class="hidden g_id_signout" id="gLogout" onclick="googleSignOut()">Log out of this app</button>
+         
+
+</body>
+    </html>
