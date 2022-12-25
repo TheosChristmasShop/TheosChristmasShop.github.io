@@ -180,7 +180,7 @@ function processName(){
     console.log("Process name is receiving "+word);
 code = document.getElementById("code").value;
 codes = ["TCSH1ng2022@","kioskinshop.0"];
-if (!name == "" && codes.includes(code)){
+if (!name == "" && codes.includes(code) && document.getElementById("legend").checked == true){
 
     document.getElementById("name").value = "";
     document.getElementById("code").value = "";
@@ -221,6 +221,7 @@ window.onload = start;
                 <br/>
                 <input id="code" type="text" title="Enter access code..." placeholder="Your access code"/>
                 <br/>
+                <input id="legend" type="checkbox">By ticking this box, I agree to the <a href="terms.html">Terms & Conditions</a> of the game.</input>
                 <br/>
                 <button id="submitName" onClick="processName();" class="buttons">Play now &rarr;</button>
             <div id="chooseWord">
