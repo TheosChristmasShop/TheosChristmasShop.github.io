@@ -178,18 +178,15 @@ result = replace();
 function processName(){
     name = document.getElementById("name").value;
     console.log("Process name is receiving "+word);
-code = document.getElementById("code").value;
-codes = ["23HangmanChristmas24","kiosk"];
-if (!name == "" && codes.includes(code) && document.getElementById("legend").checked == true){
+if (!name == "" && document.getElementById("legend").checked == true){
 
     document.getElementById("name").value = "";
-    document.getElementById("code").value = "";
     document.getElementById("nameForm").innerHTML = "";
     document.getElementById("guessForm").setAttribute("class", "expanded");
 document.getElementById("reload").innerHTML = '<button style="color:red; button-color:yellow; font-size:30px;" onClick="window.location.reload();">Start new game</button>';
     }
     else{
-        document.getElementById("nameStatus").innerHTML = "You must enter a name, agree to the terms and provide a valid access code. Either the name box is empty, you haven't agreed to our terms, or your access code is invalid.";
+        document.getElementById("nameStatus").innerHTML = "You must enter a name and agree to the terms. Either the name box is empty, or you haven't agreed to our terms.";
 
     }
 }
@@ -213,13 +210,11 @@ window.onload = start;
                 Welcome to Theo's Christmas Shop 2023.
                 <br/>
                 This year we have a christmas-themed hangman game available to our customers and visitors<br/>
-                To play you need to enter your name and an access code you have been given. If you don't have an access code, ask for one at the shop.
+                To play you need to enter your name below.
                 <br/>
                 <div aria-live="assertive" id="nameStatus"></div>
                 <br/>
                 <input id="name" type="text" title="Enter name..." placeholder="Your name"></input>
-                <br/>
-                <input id="code" type="text" title="Enter access code..." placeholder="Your access code"/>
                 <br/>
                 <input id="legend" type="checkbox">By ticking this box, I agree to the <a href="terms.html">Terms & Conditions</a> of the game.</input>
                 <br/>
